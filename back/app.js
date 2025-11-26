@@ -76,10 +76,11 @@ if (process.env.NODE_ENV === "development") {
 // Enable CORS for frontend (DEBE IR ANTES del rate limiter y body parser)
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     exposedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    credentials: true,
   })
 );
 

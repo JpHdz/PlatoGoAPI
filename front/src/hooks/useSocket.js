@@ -2,7 +2,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 
 // Usar window.SOCKET_URL (inyectado en runtime) o fallback a localhost
-const SOCKET_URL = window.SOCKET_URL || "http://localhost:4000";
+// Usar window.SOCKET_URL (inyectado en runtime) o fallback a localhost
+const SOCKET_URL = (window.SOCKET_URL && window.SOCKET_URL !== "PLACEHOLDER_SOCKET_URL")
+  ? window.SOCKET_URL
+  : "http://localhost:4000";
 
 /**
  * Hook personalizado para manejar conexiones WebSocket con reconexión automática

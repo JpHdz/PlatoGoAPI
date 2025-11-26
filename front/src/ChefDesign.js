@@ -1,98 +1,3 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { Eye, CheckCircle } from 'lucide-react';
-import './ChefDesign.css';
-
-const ChefDesign = () => {
-  // Datos de los platillos por mesa
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      mesa: 1,
-      platillos: [
-        {
-          id: 1,
-          name: 'Chile en Nogada',
-          tiempo: '1:30',
-          image: '/assets/images/cards/chile.png',
-          terminado: false
-        },
-        {
-          id: 2,
-          name: 'Enchiladas',
-          tiempo: '1:20',
-          image: '/assets/images/cards/enchiladas.png',
-          terminado: false
-        },
-        {
-          id: 3,
-          name: 'Sopes',
-          tiempo: '1:26',
-          image: '/assets/images/cards/sopes.png',
-          terminado: false
-        },
-        {
-          id: 4,
-          name: 'Tacos',
-          tiempo: '1:31',
-          image: '/assets/images/cards/tacos.png',
-          terminado: false
-        }
-      ]
-    },
-    {
-      id: 2,
-      mesa: 2,
-      platillos: [
-        {
-          id: 5,
-          name: 'Paella Mixta',
-          tiempo: '2:15',
-          image: '/assets/images/cards/paella.png',
-          terminado: false
-        },
-        {
-          id: 6,
-          name: 'Rodajas de Jamón Ibérico',
-          tiempo: '0:45',
-          image: '/assets/images/cards/jamon.png',
-          terminado: false
-        },
-        {
-          id: 7,
-          name: 'Polbo a feira',
-          tiempo: '1:55',
-          image: '/assets/images/cards/polbo.png',
-          terminado: false
-        },
-        {
-          id: 8,
-          name: 'Fabada asturiana',
-          tiempo: '2:30',
-          image: '/assets/images/cards/fabada.png',
-          terminado: false
-        }
-      ]
-    }
-  ]);
-
-  const [showDesglose, setShowDesglose] = useState(false);
-  const [completedItems, setCompletedItems] = useState([]);
-
-  // Marcar platillo como terminado
-  const markAsCompleted = (mesaId, platilloId) => {
-    const updatedOrders = orders.map(order => {
-      if (order.id === mesaId) {
-        const updatedPlatillos = order.platillos.map(platillo => {
-          if (platillo.id === platilloId) {
-            const completedPlatillo = { ...platillo, terminado: true, mesa: order.mesa };
-            setCompletedItems(prev => [...prev, completedPlatillo]);
-            return null; // Remover del array original
-          }
-          return platillo;
-        }).filter(Boolean); // Filtrar elementos null
-        
-=======
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Eye, CheckCircle } from "lucide-react";
@@ -147,26 +52,16 @@ const ChefDesign = () => {
           })
           .filter(Boolean); // Filtrar elementos null
 
->>>>>>> master
         return { ...order, platillos: updatedPlatillos };
       }
       return order;
     });
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> master
     setOrders(updatedOrders);
   };
 
   // Remover platillo completado del desglose
   const removeFromDesglose = (platilloId) => {
-<<<<<<< HEAD
-    setCompletedItems(prev => prev.filter(item => item.id !== platilloId));
-  };
-
-=======
     setCompletedItems((prev) => prev.filter((item) => item.id !== platilloId));
   };
 
@@ -178,7 +73,6 @@ const ChefDesign = () => {
     return <div className="error">{error}</div>;
   }
 
->>>>>>> master
   return (
     <div className="chef-app">
       {/* Header */}
@@ -188,38 +82,22 @@ const ChefDesign = () => {
 
       {/* Main Content */}
       <div className="chef-content">
-<<<<<<< HEAD
-        {orders.map(order => (
-=======
         {orders.map((order) => (
->>>>>>> master
           <div key={order.id} className="mesa-section">
             <div className="mesa-header">
               <div className="mesa-indicator"></div>
               <h2 className="mesa-title">MESA {order.mesa}</h2>
               <div className="mesa-line"></div>
             </div>
-<<<<<<< HEAD
-            
-            <div className="platillos-grid">
-              {order.platillos.map(platillo => (
-=======
 
             <div className="platillos-grid">
               {order.platillos.map((platillo) => (
->>>>>>> master
                 <div key={platillo.id} className="platillo-card">
                   <div className="platillo-image-container">
                     <img
                       src={platillo.image}
                       alt={platillo.name}
                       className="platillo-image"
-<<<<<<< HEAD
-                      onError={(e) => {
-                        e.target.src = `https://via.placeholder.com/300x200/8B4513/FFFFFF?text=${encodeURIComponent(platillo.name)}`;
-                      }}
-=======
->>>>>>> master
                     />
                   </div>
                   <div className="platillo-status">
@@ -250,26 +128,12 @@ const ChefDesign = () => {
           <span className="language-text">ESP</span>
           <div className="language-arrow"></div>
         </div>
-<<<<<<< HEAD
-        
-        <button
-          onClick={() => setShowDesglose(true)}
-          className="desglose-btn"
-        >
-          <Eye size={20} />
-          <span>Ver desglose</span>
-          {completedItems.length > 0 && (
-            <span className="desglose-count">
-              {completedItems.length}
-            </span>
-=======
 
         <button onClick={() => setShowDesglose(true)} className="desglose-btn">
           <Eye size={20} />
           <span>Ver desglose</span>
           {completedItems.length > 0 && (
             <span className="desglose-count">{completedItems.length}</span>
->>>>>>> master
           )}
         </button>
       </div>
@@ -295,16 +159,11 @@ const ChefDesign = () => {
                 <p className="empty-desglose">No hay platillos terminados</p>
               ) : (
                 <>
-<<<<<<< HEAD
-                  {completedItems.map(item => (
-                    <div key={`completed-${item.id}`} className="completed-item">
-=======
                   {completedItems.map((item) => (
                     <div
                       key={`completed-${item.id}`}
                       className="completed-item"
                     >
->>>>>>> master
                       <div className="completed-item-header">
                         <h3 className="completed-item-name">{item.name}</h3>
                         <span className="completed-mesa">Mesa {item.mesa}</span>
@@ -315,17 +174,11 @@ const ChefDesign = () => {
                           ×
                         </button>
                       </div>
-<<<<<<< HEAD
-                      
-                      <div className="completed-item-details">
-                        <span className="completed-tiempo">Tiempo: {item.tiempo}</span>
-=======
 
                       <div className="completed-item-details">
                         <span className="completed-tiempo">
                           Tiempo: {item.tiempo}
                         </span>
->>>>>>> master
                         <span className="completed-status">✓ Terminado</span>
                       </div>
                     </div>
@@ -340,8 +193,4 @@ const ChefDesign = () => {
   );
 };
 
-<<<<<<< HEAD
 export default ChefDesign;
-=======
-export default ChefDesign;
->>>>>>> master
