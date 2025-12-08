@@ -18,30 +18,60 @@ export const AuthProvider = ({ children }) => {
 
   // Configure axios defaults
   // Detect baseURL: window.API_URL (Docker/nginx) o localhost (desarrollo)
-  const apiUrl = window.API_URL || "http://localhost:4000/api/v1";
+  // Detect baseURL: window.API_URL (Docker/nginx) o localhost (desarrollo)
+  const apiUrl = (window.API_URL && window.API_URL !== "PLACEHOLDER_API_URL")
+    ? window.API_URL
+    : "http://localhost:4000/api/v1";
   axios.defaults.baseURL = apiUrl;
   axios.defaults.withCredentials = true;
+
+  // Helper to decode JWT safely
+  const decodeToken = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
 
   // Check if user is already authenticated on app start
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          // Try to get user info to verify token is still valid
+      const token = localStorage.getItem("token");
+      if (token) {
+        // Optimistic login: Set user from token immediately
+        const decoded = decodeToken(token);
+        if (decoded) {
+          // Construct a minimal user object from token payload
+          // The payload usually has { id, role, iat, exp }
+          // We might need more fields if the app relies on them (e.g. name), 
+          // but for routing (role) this is enough.
+          // If the app needs 'name' and it's not in token, it might show empty, 
+          // but it won't redirect to login.
+          setUser({ ...decoded, _id: decoded.id });
+        }
+
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        try {
+          // Try to get full user info to verify token is still valid and get fresh data
           const response = await axios.get("/users/me");
           setUser(response.data.data.user);
+        } catch (error) {
+          // Only logout if 401 (invalid token)
+          if (error.response?.status === 401) {
+            logout();
+          }
+          // If network error or other error, we KEEP the user state from the token
+          // so the user stays logged in (persistence).
         }
-      } catch (error) {
-        // Solo cerrar sesión si el error es 401 (token inválido o expirado)
-        if (error.response?.status === 401) {
-          logout();
-        }
-        // Si es otro error, no cerrar sesión automáticamente
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     checkAuth();

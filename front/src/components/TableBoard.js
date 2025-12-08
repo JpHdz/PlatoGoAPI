@@ -464,7 +464,7 @@ const TableBoard = ({ restaurantId, waiterId }) => {
             🔄 Refrescar
           </button>
           <Link
-            to="/create-order" // Asumiendo que esta es la ruta para "Tomar Pedido"
+            to="/client" // Ruta al diseño de cliente (Mesa por defecto)
             style={{
               padding: "10px 20px",
               background: "#28a745",
@@ -477,7 +477,7 @@ const TableBoard = ({ restaurantId, waiterId }) => {
             onMouseOver={(e) => (e.target.style.background = "#1e7e34")}
             onMouseOut={(e) => (e.target.style.background = "#28a745")}
           >
-            📝 Tomar Pedido
+            📝 Tomar Pedido (General)
           </Link>
           <Link
             to="/order-management" // Asumiendo que esta es la ruta para "Editar Pedido"
@@ -703,9 +703,28 @@ const TableBoard = ({ restaurantId, waiterId }) => {
                         fontSize: "12px",
                         color: "#666",
                         textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px"
                       }}
                     >
-                      Sin órdenes activas
+                      <span>Sin órdenes activas</span>
+                      <Link
+                        to={`/client?tableId=${table._id}`}
+                        style={{
+                          padding: "6px 12px",
+                          background: "#28a745",
+                          color: "white",
+                          textDecoration: "none",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          display: "inline-block",
+                          alignSelf: "center"
+                        }}
+                      >
+                        📝 Tomar Pedido
+                      </Link>
                     </div>
                   )}
 
